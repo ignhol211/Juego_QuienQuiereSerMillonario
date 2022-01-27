@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val client = OkHttpClient()
         val request = Request.Builder()
-        request.url("http://10.0.2.2:8082/GetQuestion/${id}/${user_answer}")
+        request.url("http://10.0.2.2:8082/question/${id}/${user_answer}")
 
         val call = client.newCall(request.build())
         call.enqueue(object : Callback {
@@ -46,16 +46,10 @@ class MainActivity : AppCompatActivity() {
                     println(body)
                     val gson = Gson()
 
-                    val question = gson.fromJson(body, Question::class.java)
-
-                    println("CONTROL 1" + question)
+                    val result = gson.fromJson(body, String::class.java)
 
                     CoroutineScope(Dispatchers.Main).launch {
-                        if (user_answer == question.correct_answer) {
-                            Toast.makeText(this@MainActivity, "Correcto", Toast.LENGTH_SHORT).show()
-                        }else {
-                            Toast.makeText(this@MainActivity, "Incorrecto", Toast.LENGTH_SHORT).show()
-                        }
+                        Toast.makeText(this@MainActivity, result, Toast.LENGTH_SHORT).show()
                         delay(2000)
                         getQuestion()
                     }
