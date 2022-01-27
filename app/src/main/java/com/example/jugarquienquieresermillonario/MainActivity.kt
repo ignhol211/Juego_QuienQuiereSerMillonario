@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getAnotherQuestion()
+        getQuestion()
     }
 
     fun checkAnswer(user_answer:String,correct_answer:String){
@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         else
             Toast.makeText(this@MainActivity, "Incorrecto", Toast.LENGTH_SHORT).show()
         CoroutineScope(Dispatchers.Main).launch{
-            delay(3000)
-            getAnotherQuestion()
+            delay(2000)
+            getQuestion()
         }
     }
 
-    fun getAnotherQuestion(){
+    fun getQuestion(){
         val client = OkHttpClient()
 
         val request = Request.Builder()
