@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getQuestion()
-
     }
 
     fun checkAnswer(user_answer: String, id: Int){
