@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">JugarQuienQuiereSerMillonario</string>
+    <string name="bienvenida">Bienvenido al Juego de Quién quiere ser millonario</string>
+    <string name="defecto">Por defecto</string>
+</resources>
