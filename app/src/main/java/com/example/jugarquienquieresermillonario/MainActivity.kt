@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 println(response.toString())
                 response.body?.let { responseBody ->
                     val body = responseBody.string()
-                    println(body)
+                    //println(body)
                     val gson = Gson()
 
                     val result = gson.fromJson(body, String::class.java)
@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity() {
 
     fun getQuestion(){
         val client = OkHttpClient()
-
         val request = Request.Builder()
         request.url("http://10.0.2.2:8082/GetQuestion")
 
