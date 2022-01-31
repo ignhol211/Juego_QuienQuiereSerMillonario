@@ -1,10 +1,12 @@
 package com.example.jugarquienquieresermillonario
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.jugarquienquieresermillonario.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println(e.toString())
                 CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(this@MainActivity, "Algo ha ido mal", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root,"Algo ha ido mal",Snackbar.LENGTH_LONG).show()
                 }
             }
 
@@ -50,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                     val result = gson.fromJson(body, String::class.java)
 
                     CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(this@MainActivity, result, Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root,result,Snackbar.LENGTH_LONG).show()
                         delay(2000)
                         getQuestion()
                     }
@@ -71,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println(e.toString())
                 CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(this@MainActivity, "Algo ha ido mal", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root,"Algo ha ido mal",Snackbar.LENGTH_LONG).show()
                 }
             }
 
@@ -85,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                     val question = gson.fromJson(body, QuestionWithoutCorrectAnswer::class.java)
 
                     CoroutineScope(Dispatchers.Main).launch {
-                        binding.pbCargando.visibility = View.GONE
+                        hideProgressBar()
                         binding.tvPregunta.text = question.question
                         binding.bOpcion1.text = question.possible_answers[0]
                         binding.bOpcion2.text = question.possible_answers[1]
@@ -93,23 +95,43 @@ class MainActivity : AppCompatActivity() {
                         binding.bOpcion4.text = question.possible_answers[3]
                     }
                     binding.bOpcion1.setOnClickListener() {
-                        binding.pbCargando.visibility = View.VISIBLE
-                        checkAnswer(binding.bOpcion1.text as String, question.id+1)
+                        showProgressBar()
+                        showAlert(binding.bOpcion1.text.toString(), question.id+1)
                     }
                     binding.bOpcion2.setOnClickListener() {
-                        binding.pbCargando.visibility = View.VISIBLE
-                        checkAnswer(binding.bOpcion2.text as String, question.id+1)
+                        showProgressBar()
+                        showAlert(binding.bOpcion2.text.toString(),question.id+1)
                     }
                     binding.bOpcion3.setOnClickListener() {
-                        binding.pbCargando.visibility = View.VISIBLE
-                        checkAnswer(binding.bOpcion3.text as String, question.id+1)
+                        showProgressBar()
+                        showAlert(binding.bOpcion3.text.toString(),question.id+1)
                     }
                     binding.bOpcion4.setOnClickListener() {
-                        binding.pbCargando.visibility = View.VISIBLE
-                        checkAnswer(binding.bOpcion4.text as String, question.id+1)
+                        showProgressBar()
+                        showAlert(binding.bOpcion4.text.toString(),question.id+1)
                     }
                 }
             }
         })
     }
+
+    fun showProgressBar(){
+        binding.pbCargando.visibility = View.VISIBLE
+    }
+
+    fun hideProgressBar(){
+        binding.pbCargando.visibility = View.GONE
+    }
+
+    fun showAlert(user_answer: String,id: Int){
+
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Quieres responder ${user_answer}")
+        builder.setPositiveButton("Sí") { dialog, id -> checkAnswer(binding.bOpcion4.text as String, id+1)}
+        builder.setNegativeButton("No") { dialog, id -> Snackbar.make(binding.root,"Selecciona otra opción",Snackbar.LENGTH_LONG).show()}
+        builder.create()
+        builder.show()
+
+    }
+
 }
