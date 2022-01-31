@@ -1,6 +1,7 @@
 package com.example.jugarquienquieresermillonario
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.jugarquienquieresermillonario.databinding.ActivityMainBinding
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getQuestion(){
+
         val client = OkHttpClient()
         val request = Request.Builder()
         request.url("http://10.0.2.2:8082/GetQuestion")
@@ -83,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                     val question = gson.fromJson(body, QuestionWithoutCorrectAnswer::class.java)
 
                     CoroutineScope(Dispatchers.Main).launch {
+                        binding.pbCargando.visibility = View.GONE
                         binding.tvPregunta.text = question.question
                         binding.bOpcion1.text = question.possible_answers[0]
                         binding.bOpcion2.text = question.possible_answers[1]
@@ -90,16 +93,20 @@ class MainActivity : AppCompatActivity() {
                         binding.bOpcion4.text = question.possible_answers[3]
                     }
                     binding.bOpcion1.setOnClickListener() {
-                        checkAnswer(binding.bOpcion1.text as String, question.id)
+                        binding.pbCargando.visibility = View.VISIBLE
+                        checkAnswer(binding.bOpcion1.text as String, question.id+1)
                     }
                     binding.bOpcion2.setOnClickListener() {
-                        checkAnswer(binding.bOpcion2.text as String, question.id)
+                        binding.pbCargando.visibility = View.VISIBLE
+                        checkAnswer(binding.bOpcion2.text as String, question.id+1)
                     }
                     binding.bOpcion3.setOnClickListener() {
-                        checkAnswer(binding.bOpcion3.text as String, question.id)
+                        binding.pbCargando.visibility = View.VISIBLE
+                        checkAnswer(binding.bOpcion3.text as String, question.id+1)
                     }
                     binding.bOpcion4.setOnClickListener() {
-                        checkAnswer(binding.bOpcion4.text as String, question.id)
+                        binding.pbCargando.visibility = View.VISIBLE
+                        checkAnswer(binding.bOpcion4.text as String, question.id+1)
                     }
                 }
             }
