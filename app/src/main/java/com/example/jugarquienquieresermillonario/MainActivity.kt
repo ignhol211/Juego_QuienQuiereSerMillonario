@@ -3,7 +3,6 @@ package com.example.jugarquienquieresermillonario
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.jugarquienquieresermillonario.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
@@ -18,6 +17,9 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+
+    var totalQuestions = 0
+    var rightQuestions = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,13 @@ class MainActivity : AppCompatActivity() {
 
                     val result = gson.fromJson(body, String::class.java)
 
+                    if (result.equals("correcto",ignoreCase = true)){
+                        totalQuestions+=1
+                        rightQuestions+=1
+                    }else{
+                        totalQuestions+=1
+                    }
+
                     CoroutineScope(Dispatchers.Main).launch {
                         Snackbar.make(binding.root,result,Snackbar.LENGTH_LONG).show()
                         delay(2000)
@@ -62,6 +71,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getQuestion(){
+
+        binding.tvPreguntasAcertadas.text = "$rightQuestions / $totalQuestions"
 
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -123,12 +134,15 @@ class MainActivity : AppCompatActivity() {
         binding.pbCargando.visibility = View.GONE
     }
 
-    fun showAlert(user_answer: String,id: Int){
+    fun showAlert(user_answer: String,id_question:Int){
 
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("¿Quieres responder ${user_answer}")
-        builder.setPositiveButton("Sí") { dialog, id -> checkAnswer(binding.bOpcion4.text as String, id+1)}
-        builder.setNegativeButton("No") { dialog, id -> Snackbar.make(binding.root,"Selecciona otra opción",Snackbar.LENGTH_LONG).show()}
+        builder.setMessage("¿Quieres responder ${user_answer} ?")
+        builder.setPositiveButton("Sí") { dialog, id -> checkAnswer(user_answer, id_question)}
+        builder.setNegativeButton("No") { dialog, id ->
+                                                Snackbar.make(binding.root,"Selecciona otra opción",Snackbar.LENGTH_LONG).show()
+                                                hideProgressBar()
+                                            }
         builder.create()
         builder.show()
 

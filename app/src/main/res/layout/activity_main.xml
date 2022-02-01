@@ -38,6 +38,7 @@
         android:text="@string/defecto"
         android:textSize="15sp"
         android:textAllCaps="false"
+        android:backgroundTint="@color/personalizado1"
         app:layout_constraintEnd_toStartOf="@id/b_opcion2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_pregunta" />
@@ -48,6 +49,7 @@
         android:text="@string/defecto"
         android:textSize="15sp"
         android:textAllCaps="false"
+        android:backgroundTint="@color/personalizado2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/b_opcion1"
         app:layout_constraintTop_toBottomOf="@+id/tv_pregunta" />
@@ -58,6 +60,7 @@
         android:text="@string/defecto"
         android:textSize="15sp"
         android:textAllCaps="false"
+        android:backgroundTint="@color/personalizado3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/b_opcion1"
         app:layout_constraintTop_toBottomOf="@id/b_opcion1" />
@@ -69,6 +72,7 @@
         android:text="@string/defecto"
         android:textAllCaps="false"
         android:textSize="15sp"
+        android:backgroundTint="@color/personalizado4"
         app:layout_constraintEnd_toStartOf="@id/b_opcion3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/b_opcion2" />
@@ -81,5 +85,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/b_opcion4" />
+
+    <TextView
+        android:id="@+id/tv_preguntasAcertadas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="@string/defecto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
