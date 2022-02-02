@@ -10,6 +10,7 @@
         android:id="@+id/tv_bienvenida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:text="@string/bienvenida"
         android:textSize="20sp"
         android:textAlignment="center"
