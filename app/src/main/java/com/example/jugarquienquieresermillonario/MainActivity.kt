@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         getQuestion()
     }
 
-    fun checkAnswer(user_answer: String, id: Int){
+    private fun checkAnswer(user_answer: String, id: Int){
 
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     fun getQuestion(){
 
-        binding.tvPreguntasAcertadas.text = "$rightQuestions / $totalQuestions"
+        binding.tvPreguntasAcertadas.text = getString(R.string.acertadas, rightQuestions,totalQuestions)
 
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -105,19 +105,19 @@ class MainActivity : AppCompatActivity() {
                         binding.bOpcion3.text = question.possible_answers[2]
                         binding.bOpcion4.text = question.possible_answers[3]
                     }
-                    binding.bOpcion1.setOnClickListener() {
+                    binding.bOpcion1.setOnClickListener {
                         showProgressBar()
                         showAlert(binding.bOpcion1.text.toString(), question.id+1)
                     }
-                    binding.bOpcion2.setOnClickListener() {
+                    binding.bOpcion2.setOnClickListener {
                         showProgressBar()
                         showAlert(binding.bOpcion2.text.toString(),question.id+1)
                     }
-                    binding.bOpcion3.setOnClickListener() {
+                    binding.bOpcion3.setOnClickListener {
                         showProgressBar()
                         showAlert(binding.bOpcion3.text.toString(),question.id+1)
                     }
-                    binding.bOpcion4.setOnClickListener() {
+                    binding.bOpcion4.setOnClickListener {
                         showProgressBar()
                         showAlert(binding.bOpcion4.text.toString(),question.id+1)
                     }
@@ -137,9 +137,9 @@ class MainActivity : AppCompatActivity() {
     fun showAlert(user_answer: String,id_question:Int){
 
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("¿Quieres responder ${user_answer} ?")
-        builder.setPositiveButton("Sí") { dialog, id -> checkAnswer(user_answer, id_question)}
-        builder.setNegativeButton("No") { dialog, id ->
+        builder.setMessage("¿Quieres responder $user_answer ?")
+        builder.setPositiveButton("Sí") { _, _ -> checkAnswer(user_answer, id_question)}
+        builder.setNegativeButton("No") { _, _ ->
                                                 Snackbar.make(binding.root,"Selecciona otra opción",Snackbar.LENGTH_LONG).show()
                                                 hideProgressBar()
                                             }
