@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
         val client = OkHttpClient()
         val request = Request.Builder()
-        request.url("http://10.0.2.2:8082/GetQuestion")
+        request.url("http://10.0.2.2:8082/question")
 
 
         val call = client.newCall(request.build())
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                     println(body)
                     val gson = Gson()
 
-                    val question = gson.fromJson(body, QuestionWithoutCorrectAnswer::class.java)
+                    val question = gson.fromJson(body, Question::class.java)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         hideProgressBar()
@@ -107,19 +107,19 @@ class MainActivity : AppCompatActivity() {
                     }
                     binding.bOpcion1.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion1.text.toString(), question.id+1)
+                        showAlert(binding.bOpcion1.text.toString(), question.id)
                     }
                     binding.bOpcion2.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion2.text.toString(),question.id+1)
+                        showAlert(binding.bOpcion2.text.toString(),question.id)
                     }
                     binding.bOpcion3.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion3.text.toString(),question.id+1)
+                        showAlert(binding.bOpcion3.text.toString(),question.id)
                     }
                     binding.bOpcion4.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion4.text.toString(),question.id+1)
+                        showAlert(binding.bOpcion4.text.toString(),question.id)
                     }
                 }
             }
