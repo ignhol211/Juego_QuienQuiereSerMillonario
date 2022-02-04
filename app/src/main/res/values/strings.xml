@@ -3,4 +3,8 @@
     <string name="bienvenida">Bienvenido al Juego ¿Quién quiere ser millonario?</string>
     <string name="defecto">Por defecto</string>
     <string name="acertadas">Acertadas: %d / %d</string>
+    <string name="inicia_sesion">Inicia sesión</string>
+    <string name="usuario">Usuario</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="next">Siguiente</string>
 </resources>

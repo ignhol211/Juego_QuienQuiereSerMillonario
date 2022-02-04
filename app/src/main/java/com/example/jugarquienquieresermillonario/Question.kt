@@ -1,15 +1,17 @@
 package com.example.jugarquienquieresermillonario
 
 import com.google.gson.Gson
+import com.google.gson.annotations.Expose
 
 class Question(
+
     val id: Int,
     var question:String,
     var possible_answers:List<String>,
-    var correct_answer:String) {
+    val correct_answer:String) {
 
     override fun toString(): String {
-        val gson = Gson()
+        var gson = Gson()
         return gson.toJson(this)
     }
 }

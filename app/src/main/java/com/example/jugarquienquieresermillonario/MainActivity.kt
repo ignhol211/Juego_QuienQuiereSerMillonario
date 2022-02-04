@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         getQuestion()
     }
 
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println(e.toString())
                 CoroutineScope(Dispatchers.Main).launch {
-                    Snackbar.make(binding.root,"Algo ha ido mal",Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.root,"Algo ha ido mal 2",Snackbar.LENGTH_LONG).show()
                 }
             }
 
@@ -84,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println(e.toString())
                 CoroutineScope(Dispatchers.Main).launch {
-                    Snackbar.make(binding.root,"Algo ha ido mal",Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.root,"Algo ha ido mal 1",Snackbar.LENGTH_LONG).show()
                 }
             }
 
