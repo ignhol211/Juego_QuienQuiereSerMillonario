@@ -4,7 +4,7 @@
     <string name="defecto">Por defecto</string>
     <string name="acertadas">Acertadas: %d / %d</string>
     <string name="inicia_sesion">Inicia sesión</string>
-    <string name="usuario">Usuario</string>
-    <string name="contrasena">Contraseña</string>
+    <string name="usuario">Usuario: al menos 3 letras a-Z</string>
+    <string name="contrasena">Contraseña: al menos 8 caracteres a-Z 0-9</string>
     <string name="next">Siguiente</string>
 </resources>
