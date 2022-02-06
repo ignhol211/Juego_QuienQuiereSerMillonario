@@ -26,13 +26,13 @@
         android:layout_margin="5dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_login">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:hint="@string/usuario"
-            app:layout_constraintBottom_toTopOf="@+id/contrasena"/>
+            app:layout_constraintBottom_toTopOf="@+id/contrasena"
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -43,12 +43,12 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="5dp"
         app:layout_constraintTop_toBottomOf="@+id/til_user">
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/contrasena"/>
+            android:hint="@string/contrasena"
+            android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

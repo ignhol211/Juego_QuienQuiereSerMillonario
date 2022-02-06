@@ -1,6 +1,5 @@
 package com.example.jugarquienquieresermillonario
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.jugarquienquieresermillonario.databinding.ActivityLoginBinding
@@ -8,11 +7,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
-import java.util.regex.Pattern
 
 class LoginActivity :AppCompatActivity() {
 
@@ -23,10 +20,7 @@ class LoginActivity :AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        println("BIEN CREADO 1")
-
         binding.bContinue.setOnClickListener{
-            println("BIEN CREADO 2")
             validateUserAndPassword()
         }
 
@@ -36,18 +30,15 @@ class LoginActivity :AppCompatActivity() {
         val user = binding.user.text.toString()
         val password = binding.password.text.toString()
 
-        println("BIEN CREADO 2 //"+user+"//"+password)
-
         val userOK = isUserOk(user)
-        println(userOK.toString())
+        println("CONTROL USER "+userOK)
         val passwordOK = isPasswordOk(password)
-        println(password.toString())
+        println("CONTROL PASSWORD "+passwordOK)
 
         if (userOK && passwordOK) {
             val token = registerUser(user,password)
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("token",token)
-            startActivity(intent)
+            println ("CONTROL "+token)
+            MainActivity.launch(this,token)
         }else{
             Snackbar.make(binding.root,"Error",Snackbar.LENGTH_LONG).show()
         }
@@ -60,6 +51,8 @@ class LoginActivity :AppCompatActivity() {
         val client = OkHttpClient()
         val request = Request.Builder()
         request.url("http://10.0.2.2:8082/registro/${user}/${password}")
+
+        println("MY CONTROL")
 
         val call = client.newCall(request.build())
         call.enqueue(object : Callback {
@@ -81,17 +74,17 @@ class LoginActivity :AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         Snackbar.make(binding.root,"El usuario ha sido registrado con el token $token",Snackbar.LENGTH_LONG).show()
-                        delay(2000)
                     }
                 }
             }
         })
+        println("MY CONTROL " + token)
         return token
     }
 
     private fun isUserOk(user: String): Boolean {
-        val pattern = Pattern.compile("[a-zA-Z]")
-        return if(pattern.matcher(user).matches() && user.length >= 3){
+        val regex = Regex.fromLiteral("abc")
+        return if (regex.matches(user) && user.length >= 3){
             true
         }else{
             Snackbar.make(binding.root,"Usuario incorrecto", Snackbar.LENGTH_LONG).show()
@@ -100,8 +93,8 @@ class LoginActivity :AppCompatActivity() {
     }
 
     private fun isPasswordOk(password: String): Boolean {
-        val pattern = Pattern.compile("[a-zA-Z0-9]")
-        return if(pattern.matcher(password).matches() && password.length >= 8){
+        val regex = Regex.fromLiteral("abc123456")
+        return if(regex.matches(password) && password.length >= 8){
             true
         }else{
             Snackbar.make(binding.root,"Contraseña incorrecto", Snackbar.LENGTH_LONG).show()

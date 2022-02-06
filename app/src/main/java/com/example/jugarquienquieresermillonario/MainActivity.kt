@@ -1,6 +1,8 @@
 package com.example.jugarquienquieresermillonario
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -21,11 +23,25 @@ class MainActivity : AppCompatActivity() {
     var totalQuestions = 0
     var rightQuestions = 0
 
+    companion object{
+        const val TOKEN = "TOKEN"
+        fun launch(context: Context, token: String){
+            val intent = Intent(context,MainActivity::class.java)
+            intent.putExtra(TOKEN,token)
+            context.startActivity(intent)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getQuestion()
+
+        val token = intent.getStringExtra(TOKEN)
+
+        println("CONTROL"+token)
+
+        token?.let { getQuestion(token) }
     }
 
     private fun checkAnswer(user_answer: String, id: Int){
@@ -62,20 +78,20 @@ class MainActivity : AppCompatActivity() {
                     CoroutineScope(Dispatchers.Main).launch {
                         Snackbar.make(binding.root,result,Snackbar.LENGTH_LONG).show()
                         delay(2000)
-                        getQuestion()
+                        getQuestion(TOKEN)
                     }
                 }
             }
         })
     }
 
-    fun getQuestion(){
+    fun getQuestion(token:String){
 
         binding.tvPreguntasAcertadas.text = getString(R.string.acertadas, rightQuestions,totalQuestions)
 
         val client = OkHttpClient()
         val request = Request.Builder()
-        request.url("http://10.0.2.2:8082/question")
+        request.url("http://10.0.2.2:8082/${token}/question")
 
 
         val call = client.newCall(request.build())
