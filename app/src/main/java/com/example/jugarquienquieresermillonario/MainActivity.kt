@@ -39,8 +39,6 @@ class MainActivity : AppCompatActivity() {
 
         val token = intent.getStringExtra(TOKEN)
 
-        println("CONTROL"+token)
-
         token?.let { getQuestion(token) }
     }
 
@@ -77,7 +75,6 @@ class MainActivity : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         Snackbar.make(binding.root,result,Snackbar.LENGTH_LONG).show()
-                        delay(2000)
                         getQuestion(TOKEN)
                     }
                 }
@@ -162,5 +159,4 @@ class MainActivity : AppCompatActivity() {
         builder.show()
 
     }
-
 }

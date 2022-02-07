@@ -15,6 +15,8 @@ class LoginActivity :AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
+    private var token = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -31,28 +33,21 @@ class LoginActivity :AppCompatActivity() {
         val password = binding.password.text.toString()
 
         val userOK = isUserOk(user)
-        println("CONTROL USER "+userOK)
         val passwordOK = isPasswordOk(password)
-        println("CONTROL PASSWORD "+passwordOK)
 
         if (userOK && passwordOK) {
-            val token = registerUser(user,password)
-            println ("CONTROL "+token)
-            MainActivity.launch(this,token)
+            registerUser(user,password)
         }else{
             Snackbar.make(binding.root,"Error",Snackbar.LENGTH_LONG).show()
         }
 
     }
 
-    private fun registerUser(user: String, password: String):String {
-        var token = ""
+    private fun registerUser(user: String, password: String){
 
         val client = OkHttpClient()
         val request = Request.Builder()
         request.url("http://10.0.2.2:8082/registro/${user}/${password}")
-
-        println("MY CONTROL")
 
         val call = client.newCall(request.build())
         call.enqueue(object : Callback {
@@ -70,16 +65,15 @@ class LoginActivity :AppCompatActivity() {
                     //println(body)
                     val gson = Gson()
 
-                    token = gson.fromJson(body, String::class.java)
+                    var token = gson.fromJson(body, String::class.java)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         Snackbar.make(binding.root,"El usuario ha sido registrado con el token $token",Snackbar.LENGTH_LONG).show()
+                        token?.let {MainActivity.launch(this@LoginActivity,token)}
                     }
                 }
             }
         })
-        println("MY CONTROL " + token)
-        return token
     }
 
     private fun isUserOk(user: String): Boolean {
