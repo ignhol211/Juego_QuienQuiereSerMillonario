@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,10 +41,16 @@ class MainActivity : AppCompatActivity() {
 
         val token = intent.getStringExtra(TOKEN)
 
-        token?.let { getQuestion(token) }
+        token?.let {
+            getQuestion(token)
+        }?:run{
+            println("SE HA RECIBIDO UN TOKEN INCORRECTO")
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
-    private fun checkAnswer(user_answer: String, id: Int){
+    private fun checkAnswer(user_answer: String, id: Int, token:String){
 
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -75,7 +83,8 @@ class MainActivity : AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         Snackbar.make(binding.root,result,Snackbar.LENGTH_LONG).show()
-                        getQuestion(TOKEN)
+                        delay(2000)
+                        getQuestion(token)
                     }
                 }
             }
@@ -109,29 +118,35 @@ class MainActivity : AppCompatActivity() {
 
                     val question = gson.fromJson(body, Question::class.java)
 
-                    CoroutineScope(Dispatchers.Main).launch {
-                        hideProgressBar()
-                        binding.tvPregunta.text = question.question
-                        binding.bOpcion1.text = question.possible_answers[0]
-                        binding.bOpcion2.text = question.possible_answers[1]
-                        binding.bOpcion3.text = question.possible_answers[2]
-                        binding.bOpcion4.text = question.possible_answers[3]
+                    question?.let{
+                        CoroutineScope(Dispatchers.Main).launch {
+                            hideProgressBar()
+                            binding.tvPregunta.text = it.question
+                            binding.bOpcion1.text = it.possible_answers[0]
+                            binding.bOpcion2.text = it.possible_answers[1]
+                            binding.bOpcion3.text = it.possible_answers[2]
+                            binding.bOpcion4.text = it.possible_answers[3]
+                        }
+                    }?: run {
+                        println("EL USUARIO YA HA RESPONDIDO TODAS LAS PREGUNTAS")
+                        val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                        startActivity(intent)
                     }
                     binding.bOpcion1.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion1.text.toString(), question.id)
+                        showAlert(binding.bOpcion1.text.toString(), question.id,token)
                     }
                     binding.bOpcion2.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion2.text.toString(),question.id)
+                        showAlert(binding.bOpcion2.text.toString(),question.id,token)
                     }
                     binding.bOpcion3.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion3.text.toString(),question.id)
+                        showAlert(binding.bOpcion3.text.toString(),question.id,token)
                     }
                     binding.bOpcion4.setOnClickListener {
                         showProgressBar()
-                        showAlert(binding.bOpcion4.text.toString(),question.id)
+                        showAlert(binding.bOpcion4.text.toString(),question.id,token)
                     }
                 }
             }
@@ -146,11 +161,11 @@ class MainActivity : AppCompatActivity() {
         binding.pbCargando.visibility = View.GONE
     }
 
-    fun showAlert(user_answer: String,id_question:Int){
+    fun showAlert(user_answer: String,id_question:Int, token:String){
 
         val builder = AlertDialog.Builder(this)
         builder.setMessage("¿Quieres responder $user_answer ?")
-        builder.setPositiveButton("Sí") { _, _ -> checkAnswer(user_answer, id_question)}
+        builder.setPositiveButton("Sí") { _, _ -> checkAnswer(user_answer, id_question,token)}
         builder.setNegativeButton("No") { _, _ ->
                                                 Snackbar.make(binding.root,"Selecciona otra opción",Snackbar.LENGTH_LONG).show()
                                                 hideProgressBar()
