@@ -19,46 +19,39 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_user"
-        android:layout_width="330dp"
-        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_login"
-        android:layout_margin="25dp"
-        app:hintEnabled="true"
-        app:hintAnimationEnabled="true">
+        android:layout_margin="25dp">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user"
-            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/usuario"
             android:inputType="text"
-            android:textSize="16sp"
-            android:autofillHints="name" />
+            android:hint="@string/usuario"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_password"
-        android:layout_width="330dp"
-        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_user"
-        android:layout_margin="25dp"
-        app:hintEnabled="true"
-        app:hintAnimationEnabled="true">
-        <EditText
+        android:hint="@string/contrasena"
+        android:layout_margin="25dp">
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
-            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/contrasena"
             android:inputType="textPassword"
-            android:textSize="16sp"
-            android:autofillHints="password" />
+            />
     </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <Button
         android:id="@+id/b_continue"

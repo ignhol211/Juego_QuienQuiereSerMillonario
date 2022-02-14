@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import com.example.jugarquienquieresermillonario.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -19,46 +20,23 @@ class LoginActivity :AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    private var userOK = false
-    private var passwordOK = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.user.addTextChangedListener(object:TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+        binding.user.doAfterTextChanged {
+            validateUserAndPassword()
+        }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                isUserOk(binding.user.text.toString())
-                validateUserAndPassword()
-            }
-
-        })
-
-        binding.password.addTextChangedListener(object:TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                isPasswordOk(binding.password.text.toString())
-                validateUserAndPassword()
-            }
-
-        })
+        binding.password.doAfterTextChanged {
+            validateUserAndPassword()
+        }
     }
 
     private fun validateUserAndPassword() {
 
-        if(userOK && passwordOK){
+        if(isUserOk() && isPasswordOk()){
             binding.bContinue.visibility = View.VISIBLE
         }else{
             binding.bContinue.visibility = View.GONE
@@ -103,14 +81,14 @@ class LoginActivity :AppCompatActivity() {
         })
     }
 
-    private fun isUserOk(user: String){
+    private fun isUserOk() : Boolean {
         val regex = Regex("[a-z]{5}$")
-        userOK = regex.matches(user)
+        return regex.matches(binding.user.text.toString())
     }
 
-    private fun isPasswordOk(password: String){
+    private fun isPasswordOk() : Boolean{
         val regex = Regex("[a-zA-Z0-9]{8}$")
-        passwordOK = regex.matches(password)
+        return  regex.matches(binding.password.text.toString())
     }
 
 }
