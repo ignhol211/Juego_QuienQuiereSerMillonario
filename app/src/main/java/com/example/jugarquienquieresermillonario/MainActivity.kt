@@ -32,8 +32,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -43,10 +41,6 @@ class MainActivity : AppCompatActivity() {
 
         token?.let {
             getQuestion(token)
-        }?:run{
-            println("SE HA RECIBIDO UN TOKEN INCORRECTO")
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(intent)
         }
     }
 

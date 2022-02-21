@@ -1,8 +1,7 @@
 package com.example.jugarquienquieresermillonario
 
+import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
@@ -15,6 +14,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
+import java.security.MessageDigest
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
 class LoginActivity :AppCompatActivity() {
 
@@ -43,8 +45,27 @@ class LoginActivity :AppCompatActivity() {
         }
 
         binding.bContinue.setOnClickListener{
-            registerUser(binding.user.text.toString(),binding.password.text.toString())
+            registerUser(binding.user.text.toString(),checkUser(binding.user.text.toString(),binding.password.text.toString()))
         }
+    }
+
+    private fun checkUser(user: String, password: String):String {
+        val sharedPreferences = getSharedPreferences("keys", Context.MODE_PRIVATE)
+        val keyChain = sharedPreferences.getString(user,"empty").toString()
+
+        if (keyChain == "empty"){
+            val key = generateRandomKey()
+            val codePassword = code(password,key)
+
+            val editSharedPreferences = sharedPreferences.edit()
+            editSharedPreferences.putString(user,key)
+            editSharedPreferences.apply()
+
+            return codePassword
+        }else{
+            return code(password,keyChain)
+        }
+
     }
 
     private fun registerUser(user: String, password: String){
@@ -73,12 +94,34 @@ class LoginActivity :AppCompatActivity() {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         Snackbar.make(binding.root,"El usuario ha sido registrado con el token $token",Snackbar.LENGTH_LONG).show()
-                        delay(2000) //PONEMOS UN DELAY PARA VER EL FUNCIONAMIENTO DEL SNACKBAR
+                        delay(1000) //PONEMOS UN DELAY PARA VER EL FUNCIONAMIENTO DEL SNACKBAR
                         token?.let {MainActivity.launch(this@LoginActivity,token)}
                     }
                 }
             }
         })
+    }
+
+    private fun code(text:String,key:String):String{
+        val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE,getKey(key))
+        val codeText = android.util.Base64.encodeToString(cipher.doFinal(text.toByteArray(Charsets.UTF_8)), android.util.Base64.URL_SAFE)
+        return codeText
+    }
+
+    private fun getKey(key : String): SecretKeySpec {
+        var keyUTF8 = key.toByteArray(Charsets.UTF_8)
+        val sha = MessageDigest.getInstance("SHA-1")
+        keyUTF8 = sha.digest(keyUTF8)
+        keyUTF8 = keyUTF8.copyOf(16)
+        return SecretKeySpec(keyUTF8, "AES")
+    }
+
+    private fun generateRandomKey():String{
+        var randomKey = ""
+        for (i in 0..10)
+            randomKey += (0..9).random()
+        return randomKey
     }
 
     private fun isUserOk() : Boolean {
