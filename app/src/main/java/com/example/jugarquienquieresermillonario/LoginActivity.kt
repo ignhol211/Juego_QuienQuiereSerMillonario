@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.jugarquienquieresermillonario.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -53,7 +52,7 @@ class LoginActivity :AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("keys", Context.MODE_PRIVATE)
         val keyChain = sharedPreferences.getString(user,"empty").toString()
 
-        if (keyChain == "empty"){
+        return if (keyChain == "empty"){
             val key = generateRandomKey()
             val codePassword = code(password,key)
 
@@ -61,9 +60,9 @@ class LoginActivity :AppCompatActivity() {
             editSharedPreferences.putString(user,key)
             editSharedPreferences.apply()
 
-            return codePassword
+            codePassword
         }else{
-            return code(password,keyChain)
+            code(password,keyChain)
         }
 
     }
@@ -87,15 +86,14 @@ class LoginActivity :AppCompatActivity() {
                 println(response.toString())
                 response.body?.let { responseBody ->
                     val body = responseBody.string()
-                    //println(body)
-                    val gson = Gson()
-
-                    val token = gson.fromJson(body, String::class.java)
-
                     CoroutineScope(Dispatchers.Main).launch {
-                        Snackbar.make(binding.root,"El usuario ha sido registrado con el token $token",Snackbar.LENGTH_LONG).show()
-                        delay(1000) //PONEMOS UN DELAY PARA VER EL FUNCIONAMIENTO DEL SNACKBAR
-                        token?.let {MainActivity.launch(this@LoginActivity,token)}
+                        if(body.contains("Contraseña incorrecta")){
+                            Snackbar.make( binding.root,body,Snackbar.LENGTH_LONG).show()
+                        }else {
+                            Snackbar.make(binding.root,"El usuario ha sido registrado con el token $body",Snackbar.LENGTH_LONG).show()
+                            delay(1000)
+                            MainActivity.launch(this@LoginActivity, body)
+                        }
                     }
                 }
             }
